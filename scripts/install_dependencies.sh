@@ -1,35 +1,30 @@
 #!/bin/bash
 set -e  # Exit on any error
 
+echo "Starting BeforeInstall script..."
+
 # Update system packages
 sudo yum update -y
 
-# Install NVM if not installed
-if [ ! -d "$HOME/.nvm" ]; then
-    echo "Installing NVM..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+# Completely remove the app directory to start fresh
+APP_DIR="/home/ec2-user/myapp"
+if [ -d "$APP_DIR" ]; then
+    echo "Removing existing app directory for fresh installation..."
+    sudo rm -rf "$APP_DIR"
 fi
 
-# Load NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-# Install Node.js 23
-echo "Installing Node.js 23..."
-nvm install 23
-export PATH="$HOME/.nvm/versions/node/$(nvm version)/bin:$PATH"
-
-# Ensure the app directory exists but don't create package.json
-APP_DIR="/home/ec2-user/myapp"
-
-# Don't clean the directory - CodeDeploy will handle copying files
-# Simply ensure the directory exists
+# Create fresh directory
 mkdir -p "$APP_DIR"
-echo "Created $APP_DIR directory if it didn't exist."
+echo "Created fresh $APP_DIR directory."
 
-# Don't create package.json or run npm install here
-# This will be done after files are deployed
+# Install NVM if not installed
+if [ ! -d "/home/ec2-user/.nvm" ]; then
+    echo "Installing NVM..."
+    sudo -u ec2-user bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash'
+fi
+
+# Make sure scripts are executable
+chmod +x /home/ec2-user/myapp/scripts/*.sh || echo "No scripts to make executable yet"
 
 # Install MongoDB
 echo "[mongodb-org-8.0]
@@ -41,3 +36,5 @@ gpgkey=https://pgp.mongodb.com/server-8.0.asc" | sudo tee /etc/yum.repos.d/mongo
 
 sudo yum install -y mongodb-org --enablerepo=mongodb-org-8.0
 sudo systemctl start mongod
+
+echo "BeforeInstall script completed successfully."
