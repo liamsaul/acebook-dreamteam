@@ -16,25 +16,44 @@ cd /home/ec2-user/myapp
 echo "Starting server in directory: $(pwd)"
 echo "Node version: $(node -v)"
 
+# Create logs directory if it doesn't exist
+mkdir -p /home/ec2-user/logs
+
 # Try to find nodemon
 NODEMON_PATH=$(which nodemon)
 echo "Using nodemon from: $NODEMON_PATH"
 
-# Check if we can run nodemon directly
+# Run the application in the background
 if nodemon --version >/dev/null 2>&1; then
-  echo "Nodemon working properly, starting application..."
-  npm run start
+  echo "Nodemon working properly, starting application in background..."
+  nohup npm run start > /home/ec2-user/logs/app.log 2>&1 &
 else
   echo "Nodemon not working properly, starting with node directly..."
   # Find the www file
   if [ -f "./bin/www" ]; then
-    echo "Starting application with node directly..."
-    node ./bin/www
+    echo "Starting application with node directly in background..."
+    nohup node ./bin/www > /home/ec2-user/logs/app.log 2>&1 &
   else
-    echo "Looking for alternate start scripts..."
     # Find a main file from package.json
     MAIN_FILE=$(node -e "console.log(require('./package.json').main || 'index.js')")
-    echo "Starting $MAIN_FILE with node..."
-    node $MAIN_FILE
+    echo "Starting $MAIN_FILE with node in background..."
+    nohup node $MAIN_FILE > /home/ec2-user/logs/app.log 2>&1 &
   fi
 fi
+
+# Store the process ID
+echo $! > /home/ec2-user/myapp/app.pid
+echo "Application started in background with PID: $(cat /home/ec2-user/myapp/app.pid)"
+
+# Give the application a moment to start and see if it crashes immediately
+sleep 5
+
+# Check if process is still running
+if ps -p $(cat /home/ec2-user/myapp/app.pid) > /dev/null; then
+  echo "Application successfully started and running."
+else
+  echo "WARNING: Application may have crashed after starting. Check logs at /home/ec2-user/logs/app.log"
+  # Don't exit with error, let CodeDeploy continue
+fi
+
+echo "ApplicationStart script completed."
