@@ -20,28 +20,18 @@ echo "Installing Node.js 23..."
 nvm install 23
 export PATH="$HOME/.nvm/versions/node/$(nvm version)/bin:$PATH"
 
-# Ensure a clean app directory
+# Ensure the app directory exists but don't create package.json
 APP_DIR="/home/ec2-user/myapp"
-if [ -d "$APP_DIR" ]; then
-    echo "Cleaning up existing app directory..."
-    sudo rm -rf "$APP_DIR"/*
-fi
 
-# Recreate the app directory
+# Don't clean the directory - CodeDeploy will handle copying files
+# Simply ensure the directory exists
 mkdir -p "$APP_DIR"
-echo "Created $APP_DIR directory."
+echo "Created $APP_DIR directory if it didn't exist."
 
-# Move to app directory and install npm dependencies
-cd "$APP_DIR"
+# Don't create package.json or run npm install here
+# This will be done after files are deployed
 
-# Ensure package.json is only created if it doesn't exist
-if [ ! -f "package.json" ]; then
-    npm init -y
-fi
-
-npm install
-
-# Install and start MongoDB
+# Install MongoDB
 echo "[mongodb-org-8.0]
 name=MongoDB Repository
 baseurl=https://repo.mongodb.org/yum/amazon/2023/mongodb-org/8.0/aarch64/
