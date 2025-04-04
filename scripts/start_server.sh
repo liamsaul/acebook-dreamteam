@@ -64,6 +64,6 @@ echo "Starting application..."
 cd /home/ec2-user/myapp
 curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
 sudo yum install -y nodejs
-npm install -g pm2
+sudo npm install -g pm2
 pm2 start npm -- start
 pm2 save
