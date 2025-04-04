@@ -31,11 +31,11 @@ sudo yum install -y nodejs
 # Install dependencies
 cd /home/ec2-user/myapp
 echo "Installing npm dependencies in $(pwd)..."
-npm install
+sudo npm install
 
 # Install nodemon globally with specific version
 echo "Installing nodemon globally..."
-npm install -g nodemon@latest
+sudo npm install -g nodemon@latest
 
 # # Also install nodemon locally
 # echo "Installing nodemon locally..."
@@ -43,13 +43,13 @@ npm install -g nodemon@latest
 
 # Install pm2 for server start
 echo "Installing pm2 for automatic server start"
-npm install -g pm2
+sudo npm install -g pm2
 
 # # Check nodemon installation
 # echo "Nodemon version: $(nodemon --version || echo 'Not installed correctly')"
 
-# Fix permissions
-echo "Setting proper permissions..."
-chmod -R 755 /home/ec2-user/myapp/node_modules
+# # Fix permissions
+# echo "Setting proper permissions..."
+# chmod -R 755 /home/ec2-user/myapp/node_modules
 
 echo "AfterInstall script completed successfully."
