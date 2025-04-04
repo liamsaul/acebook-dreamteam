@@ -23,6 +23,9 @@ if [ ! -d "/home/ec2-user/.nvm" ]; then
     sudo -u ec2-user bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash'
 fi
 
+curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+sudo yum install -y nodejs
+
 # Make sure scripts are executable
 chmod +x /home/ec2-user/myapp/scripts/*.sh || echo "No scripts to make executable yet"
 
