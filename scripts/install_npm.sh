@@ -28,6 +28,9 @@ echo "Starting AfterInstall script..."
 curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
 sudo yum install -y nodejs
 
+sudo npm cache clean --force
+sudo npm init -y
+
 # Install dependencies
 cd /home/ec2-user/myapp
 echo "Installing npm dependencies in $(pwd)..."

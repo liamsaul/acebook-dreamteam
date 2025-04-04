@@ -26,6 +26,8 @@ fi
 curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
 sudo yum install -y nodejs
 
+sudo npm init -y
+
 # Make sure scripts are executable
 chmod +x /home/ec2-user/myapp/scripts/*.sh || echo "No scripts to make executable yet"
 
