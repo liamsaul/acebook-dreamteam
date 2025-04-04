@@ -40,9 +40,9 @@ sudo npm install
 echo "Installing nodemon globally..."
 sudo npm install -g nodemon@latest
 
-# # Also install nodemon locally
-# echo "Installing nodemon locally..."
-# npm install --save-dev nodemon
+# Also install nodemon locally
+echo "Installing nodemon locally..."
+npm install --save-dev nodemon
 
 # Install pm2 for server start
 echo "Installing pm2 for automatic server start"
