@@ -37,6 +37,4 @@ gpgkey=https://pgp.mongodb.com/server-8.0.asc" | sudo tee /etc/yum.repos.d/mongo
 sudo yum install -y mongodb-org --enablerepo=mongodb-org-8.0
 sudo systemctl start mongod
 
-npm install -g pm2
-
 echo "BeforeInstall script completed successfully."

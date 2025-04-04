@@ -18,7 +18,7 @@ nvm alias default 23
 echo "Node version: $(node -v)"
 echo "NPM version: $(npm -v)"
 
-# First remove any problematic nodemon installations
+# Remove any problematic nodemon installations
 echo "Cleaning any existing nodemon installations..."
 npm uninstall -g nodemon || true
 rm -rf /home/ec2-user/myapp/node_modules/nodemon || true
@@ -36,6 +36,10 @@ npm install -g nodemon@latest
 # Also install nodemon locally
 echo "Installing nodemon locally..."
 npm install --save-dev nodemon
+
+# Install pm2 for server start
+echo "Installing pm2 for automatic server start"
+npm install -g pm2
 
 # Check nodemon installation
 echo "Nodemon version: $(nodemon --version || echo 'Not installed correctly')"
