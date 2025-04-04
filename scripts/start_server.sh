@@ -61,7 +61,7 @@ echo "Starting application..."
 # echo "ApplicationStart script completed."
 
 #!/bin/bash
-cd /home/ec2-user/my-app
+cd /home/ec2-user/myapp
 npm install
 pm2 start npm -- start
 pm2 save
